@@ -1,4 +1,9 @@
 from PrOD import blwp
 import pathlib
 
-blwp.decode(pathlib.Path('tests/test.sblwp'))
+dataList = blwp.decoder(pathlib.Path('tests/test.sblwp'))
+
+#print(dataList)
+dataOut = blwp.encoder(dataList)
+
+#(open(pathlib.Path('tests/test.sblwp'), 'wb')).write(dataOut.read())

@@ -2,4 +2,5 @@ dist/
 build/
 .vscode/
 pipUpload.bat
-PrOD.egg-info/
+bwlpPrOD.egg-info/
+PrOD/__pycache__/

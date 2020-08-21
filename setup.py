@@ -6,8 +6,8 @@ with open("README.md", "r") as desc:
 
 
 setuptools.setup(
-    name="PrOD",
-    version="0.1.0",
+    name="bwlpprod",
+    version="0.1.2",
     author="SDarkMagic",
     author_email="TheSDarkMagic@gmail.com",
     description="A program for decoding and re-encoding Nintendo's PrOD file format.",
@@ -24,6 +24,5 @@ setuptools.setup(
     python_requires='>=3.7',
     install_requires=[
         "oead>=1.1.1",
-        "readchar>=2.0.1",
     ],
 )
