@@ -18,7 +18,7 @@ def readInt32(bytesIn):
     return(bytesOut)
 
 def writeInt32(intIn):
-    bytesOut = intIn.to_bytes(4, 'big', signed=True)
+    bytesOut = intIn.to_bytes(4, byteorder='big', signed=True)
     return(bytesOut)
 
 def readFloat(bytesIn):
@@ -26,7 +26,7 @@ def readFloat(bytesIn):
     return(bytesOut)
 
 def writeFloat(floatIn):
-    bytesOut = struct.pack('>f', round(floatIn, 5))
+    bytesOut = struct.pack('>f', floatIn)
     return(bytesOut)
 
 def newKeyIndx(keyList):

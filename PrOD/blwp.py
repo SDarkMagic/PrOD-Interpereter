@@ -93,37 +93,39 @@ def decoder(fileIn):
 def encoder(rawDataIn):
     fileStream = io.BytesIO()
     magic = 'PrOD'
-    compileKeys = []
+    compileKeys = {}
+    compileKeyList = []
     uniqueKeys = list(rawDataIn.keys())
     if isinstance(rawDataIn, dict):
         objectInstances = len(list(rawDataIn.keys()))
         print('dict in')
         fileStream.write(magic.encode('ANSI'))
         fileStream.write(util.writeInt32(0x01000000))
-        fileStream.write(util.writeInt32(0x00000001))
+        fileStream.write(util.writeInt32(1))
 
-        fileStream.write(util.writeInt32(0x00000000)) # Placeholder for offset to string table data
-        fileStream.write(util.writeInt32(0x00000000)) # Placeholder for file size
+        fileStream.write(util.writeInt32(0)) # Placeholder for offset to string table data
+        fileStream.write(util.writeInt32(0)) # Placeholder for file size
         fileStream.write(util.writeInt32(objectInstances)) # Number of instances
-        fileStream.write(util.writeInt32(0x00000000)) # Placeholder for string table offset
-        fileStream.write(util.writeInt32(0x00000000)) # Padding; always 0
+        fileStream.write(util.writeInt32(0)) # Placeholder for string table offset
+        fileStream.write(util.writeInt32(0)) # Padding; always 0
 
         stringTable = io.BytesIO()
-        for key in list(rawDataIn.keys()):
-            key = list(dictionary.keys())[0]
-            compileKeys.append(key)
-            if key in uniqueKeys:
-                continue
-            else:
-                uniqueKeys.append(key)
+
         for key in uniqueKeys:
-            instCount = int(compileKeys.count(key))
+            for subKey in list(sorted((rawDataIn.get(key)).keys())):
+                compileKeyList.append(subKey)
+            compileKeys.update({key: compileKeyList})
+            compileKeyList = []
+#        print(compileKeys)
+
+        for key in uniqueKeys:
+            instCount = len(compileKeys.get(key))
             fileStream.write(util.writeInt32(instCount * 32)) # Size of each instance in bytes
             fileStream.write(util.writeInt32(instCount)) # Number of instances
             fileStream.write(util.writeInt32(int(stringTable.tell()) + 8))
 
             stringTable.write(bytes(key.encode('ANSI'))) # Add Name to string table
-            fileStream.write(util.writeInt32(0x00000000)) # Null terminator for string
+            fileStream.write(util.writeInt32(0)) # Null terminator for string
 
             alignment = ((((len(key) + 1) + 3) &~ (3)) - (len(key) + 1))
             stringPadding = util.writeInt32(alignment)
@@ -131,13 +133,11 @@ def encoder(rawDataIn):
 
             fileStream.write(util.writeInt32(0))
 
-            for dictionary in rawDataIn:
-                print(dictionary)
-                try:
-                    currDict = dictionary.get(key)
-                except:
-                    continue
-                if currDict != None:
+            majorCurrDict = rawDataIn.get(key)
+            
+            for subKey in majorCurrDict.keys():
+                if majorCurrDict != None:
+                    currDict = majorCurrDict.get(subKey)
 #                    print(currDict)
                     translate = currDict.get('translate')
                     rotation = currDict.get('rotation')
@@ -159,23 +159,41 @@ def encoder(rawDataIn):
                     # More padding, always 0
                     fileStream.write(util.writeInt32(0))
 
-                    currDictIndx = rawDataIn.index(dictionary)
-                    rawDataIn.pop(currDictIndx)
-                    currDict = None
+#                    currDictIndx = rawDataIn.index(dictionary)
+#                    rawDataIn.pop(currDictIndx)
+#                    currDict = None
                 else:
+                    print('dict was empty')
                     continue
-#            print(rawDataIn)
-#        fileStream.seek(0x0c)
-#        fileStream.write()
+        fileStream.seek(0, 2)
+        streamLength = int(fileStream.tell())
+
+        fileStream.seek(0x0c)
+        fileStream.write(util.writeInt32(int(streamLength - 8)))
+
+        fileStream.seek(0, 2)
+        newLength = int(fileStream.tell())
+
+        fileStream.seek(0x18)
+        fileStream.write(util.writeInt32(newLength))
+
+        fileStream.seek(0, 2)
+        fileStream.write(util.writeInt32(len(uniqueKeys)))
+        fileStream.write(util.writeInt32(int(fileStream.tell())))
+        for uKey in uniqueKeys:
+            fileStream.write(bytes(str(uKey).encode('ANSI')))
+            fileStream.write(util.writeInt32(0))
+
+        fileStream.seek(0, 2)
+        finalSize = fileStream.tell()
+        fileStream.seek(0x10)
+        fileStream.write(util.writeInt32(finalSize))
             
-#        print(compileKeys)
+
         fileStream.seek(0)
-#        (open(pathlib.Path('tests/testOut.blwp'), 'wb')).write(fileStream.read())
-#        print(fileStream.read())
-
-
+        fileData = fileStream.read()
 
     else:
         print('Inputted data was not formatted properly.')
         return
-    return(fileStream)
+    return(fileData)
