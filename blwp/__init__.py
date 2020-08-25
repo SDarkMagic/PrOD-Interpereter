@@ -1,3 +1,3 @@
-from PrOD import blwp
-from PrOD import util
+from blwp import prod
+from blwp import util
 import oead

@@ -6,7 +6,8 @@ import pathlib
 from blwp import util
 
 def decoder(fileIn):
-    readFile = open(fileIn, 'rb').read()
+    openFile = open(fileIn, 'rb')
+    readFile = openFile.read()
     uncompressedFile = util.checkCompression(readFile)
     fileStream = io.BytesIO(uncompressedFile)
     magic = fileStream.read(4)
@@ -86,8 +87,9 @@ def decoder(fileIn):
             print('File was not formatted properly; ending operations.')
             return
     else:
-        print('File was not a PrOD file; cancelling operations.')
+        print('File was not a valid PrOD file; cancelling operations.')
         return
+    openFile.close()
     return(instanceHeader)
 
 def encoder(rawDataIn):
@@ -103,7 +105,7 @@ def encoder(rawDataIn):
 
     if isinstance(rawDataIn, dict):
         objectInstances = len(list(rawDataIn.keys()))
-        print('dict in')
+#        print('dict in')
         fileStream.write(magic.encode('ANSI')) # Magic
         fileStream.write(util.writeInt32(0x01000000)) # Version number and padding?
         fileStream.write(util.writeInt32(1)) # Unknown, always 1
