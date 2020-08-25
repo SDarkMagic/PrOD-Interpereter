@@ -2,5 +2,5 @@ dist/
 build/
 .vscode/
 pipUpload.bat
-bwlpprod.egg-info/
+blwpprod.egg-info/
 blwp/__pycache__/

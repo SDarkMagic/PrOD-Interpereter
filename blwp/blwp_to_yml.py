@@ -15,7 +15,7 @@ def main():
     if args.ymlFile == None:
         yml = f'{str(bwlpFile.split(".")[0])}.yml'
     else:
-        yml = f'{str(args.ymlFile).split('.')[0]}.yml'
+        yml = f"{str(args.ymlFile).split('.')[0]}.yml"
 
     openFile = pathlib.Path(bwlpFile)
     dataOut = blwp.prod.decoder(openFile)

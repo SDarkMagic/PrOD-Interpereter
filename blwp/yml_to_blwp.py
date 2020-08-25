@@ -20,7 +20,7 @@ def main():
             ext = 'sblwp'
         bwlpFile = f'{str(ymlFile.split(".")[0])}.{ext}'
     else:
-        bwlpFile = f'{str(args.bwlpFile).split('.')[0]}.{ext}'
+        bwlpFile = f"{str(args.bwlpFile).split('.')[0]}.{ext}"
 
     openFile = open(pathlib.Path(ymlFile), 'rt')
     readFile = yaml.safe_load(openFile.read())
