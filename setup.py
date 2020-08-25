@@ -6,7 +6,7 @@ with open("README.md", "r") as desc:
 
 
 setuptools.setup(
-    name="bwlpprod",
+    name="blwpprod",
     version="1.1.1",
     author="SDarkMagic",
     author_email="TheSDarkMagic@gmail.com",
