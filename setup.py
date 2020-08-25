@@ -7,7 +7,7 @@ with open("README.md", "r") as desc:
 
 setuptools.setup(
     name="blwpprod",
-    version="1.1.1",
+    version="1.1.2",
     author="SDarkMagic",
     author_email="TheSDarkMagic@gmail.com",
     description="A program for decoding and re-encoding Nintendo's PrOD file format.",
