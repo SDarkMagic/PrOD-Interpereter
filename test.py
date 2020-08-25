@@ -1,12 +1,16 @@
 from PrOD import blwp
 import pathlib
 import json
+import oead
 
-dataList = blwp.decoder(pathlib.Path('tests/testOut.blwp'))
-(open(pathlib.Path('tests/testOutB.json'), 'wt')).write(json.dumps(dataList, indent=2))
+dataList = blwp.decoder(pathlib.Path('tests/E-5_TeraTree.bak.sblwp'))
+(open(pathlib.Path('tests/E-5.json'), 'wt')).write(json.dumps(dataList, indent=2))
 
 #print(dataList)
-dataOut = blwp.encoder(dataList)
+dataOut = blwp.encoder(json.loads(open('tests/E-5.json', 'rt').read()))
 #print(dataOut)
 
-#(open(pathlib.Path('tests/testOut.blwp'), 'wb')).write(dataOut)
+if dataOut != None:
+    (open(pathlib.Path('tests/E-5_TeraTree.sblwp'), 'wb')).write(oead.yaz0.compress(dataOut))
+else:
+    print('Nothing to write.')

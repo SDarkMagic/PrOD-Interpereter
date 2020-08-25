@@ -7,7 +7,7 @@ with open("README.md", "r") as desc:
 
 setuptools.setup(
     name="bwlpprod",
-    version="0.1.2",
+    version="1.0.0",
     author="SDarkMagic",
     author_email="TheSDarkMagic@gmail.com",
     description="A program for decoding and re-encoding Nintendo's PrOD file format.",
@@ -15,7 +15,7 @@ setuptools.setup(
     long_description_content_type="text/markdown",
     url="https://github.com/SDarkMagic/PrOD-Interpereter",
     include_package_data=True,
-    packages=['PrOD'],
+    packages=['blwp'],
     classifiers=[
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: MIT License",
